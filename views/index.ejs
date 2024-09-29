@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Restaurant Token System</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Restaurant Token System</h1>
+    
+    <div class="form-container">
+      <form action="/order" method="POST">
+        <input type="text" name="customerName" placeholder="Customer Name" required>
+        <input type="text" name="menuItem" placeholder="Menu Item" required>
+        <button type="submit">Place Order</button>
+      </form>
+    </div>
+
+    <h2>Orders</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Order ID</th>
+          <th>Customer Name</th>
+          <th>Menu Item</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% orders.forEach(order => { %>
+        <tr>
+          <td><%= order.id %></td>
+          <td><%= order.customerName %></td>
+          <td><%= order.menuItem %></td>
+          <td><%= order.status %></td>
+          <td>
+            <% if (order.status === 'Preparing') { %>
+            <form action="/prepare/<%= order.id %>" method="POST">
+              <button type="submit">Mark as Prepared</button>
+            </form>
+            <% } %>
+            <form action="/delete/<%= order.id %>" method="POST">
+              <button type="submit">Delete</button>
+            </form>
+          </td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+
+    <h2>Prepared Orders Queue</h2>
+    <ul id="preparedQueue">
+      <% preparedQueue.forEach(order => { %>
+        <li>Order ID: <%= order.id %> | Customer: <%= order.customerName %> | Menu Item: <%= order.menuItem %></li>
+      <% }) %>
+    </ul>
+
+    <form action="/serve" method="POST">
+      <button type="submit" class="serve-btn">Serve Next Order</button>
+    </form>
+  </div>
+</body>
+</html>
+
